@@ -1,15 +1,31 @@
 /** @jsxImportSource theme-ui */
-import { useRouter } from 'next/router';
-import Link from 'next/link';
 
-export default () => {
-    const router = useRouter();
-    // tiene que ser el mismo que el nombre del archivo:
-    const { id } = router.query;
-
+const Note = () => {
     return (
-        <div sx={{ variant: 'containers.page' }}>
-            <h1>Note: {id}</h1>
-        </div>
-    );
-};
+      <div sx={{variant: 'containers.page'}}>
+        <h1>Note: {id} </h1>
+      </div>
+    )
+}
+  
+export default Note
+
+export async function getServerSideProps({params, req, res}) {
+    const response = await fetch(`http://localhost:3000/api/note/${params.id}`)
+
+    // so much power!
+    if (!response.ok) {
+        res.writeHead(302, { Location: '/notes' })
+        console.log('Error. Could not find note')
+        res.end()
+        return {props: {}}
+    }
+
+    const {data} = await response.json()
+
+    if (data) {
+        return {
+            props: {note: data}
+        }
+    }
+}

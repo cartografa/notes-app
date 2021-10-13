@@ -17,6 +17,7 @@ const handler = nc()
 
         res.json({ data: note })
     })
+
     .patch((req, res) => {
         const note = getNote(req.query.id)
 
@@ -32,6 +33,7 @@ const handler = nc()
         notes[i] = updated
         res.json({ data: updated })
     })
+    
     .delete((req, res) => {
         const note = getNote(req.query.id)
 
